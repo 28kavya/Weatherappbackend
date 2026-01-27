@@ -7,9 +7,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class WeatherappApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(WeatherappApplication.class, args);
-	}
-    @Bean
-    public RestTemplate restTemplate() {
-        return new RestTemplate();
-}
+        SpringApplication.run(WeatherappApplication.class, args);
+
+        @Bean
+        public RestTemplate restTemplate () {
+            return new RestTemplate();
+        }
+    }

@@ -8,5 +8,6 @@ public class WeatherResponse {
     private double temperature;
     private int humidity;
     private String description;
+    private int weatherCode;
 }
 

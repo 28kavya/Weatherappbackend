@@ -28,28 +28,45 @@ public class WeatherService {
 
     public WeatherResponse getWeather(String city) {
         try {
-            String url = String.format("%s?q=%s&appid=%s&units=metric",
-                    apiUrl, city, apiKey);
+            String url = String.format(
+                    "%s?q=%s&appid=%s&units=metric",
+                    apiUrl, city, apiKey
+            );
 
-            Map<String, Object> response = restTemplate.getForObject(url, Map.class);
+            Map<String, Object> response =
+                    restTemplate.getForObject(url, Map.class);
 
-            Map<String, Object> main = (Map<String, Object>) response.get("main");
+            Map<String, Object> main =
+                    (Map<String, Object>) response.get("main");
+
             List<Map<String, Object>> weatherList =
                     (List<Map<String, Object>>) response.get("weather");
+
+            Map<String, Object> weather = weatherList.get(0);
 
             WeatherResponse wr = new WeatherResponse();
             wr.setCity(city);
 
-            // Safe casting
+            // ✅ Weather code (for background logic)
+            Object id = weather.get("id");
+            wr.setWeatherCode(id instanceof Integer
+                    ? (Integer) id
+                    : ((Number) id).intValue());
+
+            // ✅ Description
+            wr.setDescription((String) weather.get("description"));
+
+            // ✅ Temperature
             Object temp = main.get("temp");
-            wr.setTemperature(temp instanceof Double ? (Double) temp :
-                    ((Number) temp).doubleValue());
+            wr.setTemperature(temp instanceof Double
+                    ? (Double) temp
+                    : ((Number) temp).doubleValue());
 
+            // ✅ Humidity
             Object humidity = main.get("humidity");
-            wr.setHumidity(humidity instanceof Integer ? (Integer) humidity :
-                    ((Number) humidity).intValue());
-
-            wr.setDescription((String) weatherList.get(0).get("description"));
+            wr.setHumidity(humidity instanceof Integer
+                    ? (Integer) humidity
+                    : ((Number) humidity).intValue());
 
             return wr;
 
